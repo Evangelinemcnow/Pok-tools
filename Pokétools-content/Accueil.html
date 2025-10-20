@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+
+<title>Poké tools</title>
+</head>
+<body>
+
+<header>
+    <div class="left-header">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <h1>Poké tools</h1>
+    </div>
+</header>
+
+<div class="side-menu" id="sideMenu">
+    <a href="Accueil.html" alt="Accueil"><img src="Images/Pokecenter54x41.png" alt="Pokécenter"><span><p>plai</p>Accueil</span></a>
+    <a href="Pokébuilder.html" alt="Pokébuilder"><img src="Images/Togepi54x54.png" alt="Togepi"><span><p>A</p>Pokébuilder</span></a>
+    <a href="Codex.html" alt="Codex"><img src="Images/Pokedex-54x41.png" alt="Pokedex"><span><p>plac</p>Codex</span></a>
+    <a href="Dmgcalc.html"alt="Dmgcalc"><img src="Images/Porygon2-54x53.png" alt="Porygon2"><span>Damage calculator</span></a>
+</div>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<main id="mainContent">
+    <div class="main-content">
+        <img src="Images/Accueil.poketools.png" alt="Accueil" class="logo-accueil">
+
+        <div class="center-box">
+            <h2>Bienvenue sur poké tools</h2>
+            <textarea placeholder="Bienvenue sur cette première version de Poké tools
+Je vais utiliser ce site pour centraliser tous mes outils pour Pokémon.
+Le site est fait par une fan et n'a aucun lien avec Pokémon company ni Nitendo.
+Si vous vous avez une question ou que vous trouvez un bug, contactez moi sur Reddit.
+Merci d'utiliser Poké tools. J'espère pouvoir ajouter de nouveaux outils très bientôt.
+— Evangéline" rows="20"></textarea>
+    </div>
+</main>
+
+<footer id="footer">
+    <span>© 2025 - Poké tools</span>
+</footer>
+
+<script>
+const menuBtn = document.getElementById("menuBtn");
+const sideMenu = document.getElementById("sideMenu");
+const menuOverlay = document.getElementById("menuOverlay");
+const mainContent = document.getElementById("mainContent");
+const footer = document.getElementById("footer");
+
+menuBtn.addEventListener("click", toggleMenu);
+menuOverlay.addEventListener("click", toggleMenu);
+
+function toggleMenu() {
+    sideMenu.classList.toggle("open");
+    menuOverlay.classList.toggle("active");
+
+    if(sideMenu.classList.contains("open")) {
+        mainContent.style.transform = "translateX(250px)";
+        footer.style.transform = "translateX(0px)";
+        menuBtn.textContent = "✕";
+    } else {
+        mainContent.style.transform = "translateX(0)";
+        footer.style.transform = "translateX(0)";
+        menuBtn.textContent = "☰";
+    }
+}
+</script>
+
+</body>
+</html>
