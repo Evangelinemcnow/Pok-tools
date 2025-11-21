@@ -1,65 +1,76 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-
-<title>Poké tools</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poké Tools - Codex</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
 
-<header>
-    <div class="left-header">
-        <button class="menu-btn" id="menuBtn">☰</button>
-        <h1>Poké tools</h1>
+<body class="bg-gray-900 text-gray-900 ">
+
+    <header class="bg-gray-800 text-white shadow-md p-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <button id="menuBtn" class="text-2xl font-bold hover:text-gray-300">☰</button>
+            <h1 class="text-xl font-bold">Poké Tools</h1>
+        </div>
+    </header>
+
+    <nav id="sideMenu"
+        class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white transform -translate-x-full transition-transform duration-300 z-40">
+        <ul class="flex flex-col mt-6 gap-4 p-4">
+            <li><a href="Accueil.html" class="flex items-center gap-2 hover:bg-gray-800 p-2 rounded"><img
+                        src="Images/Pokecenter54x41.png" alt="Pokécenter" class="w-10 h-10">Accueil</a></li>
+            <li><a href="Pokébuilder.html" class="flex items-center gap-2 hover:bg-gray-800 p-2 rounded"><img
+                        src="Images/Togepi54x54.png" alt="Togepi" class="w-10 h-10">Pokébuilder</a></li>
+            <li><a href="Codex.html" class="flex items-center gap-2 hover:bg-gray-800 p-2 rounded"><img
+                        src="Images/Pokedex-54x41.png" alt="Pokedex" class="w-10 h-10">Codex</a></li>
+            <li><a href="Dmgcalc.html" class="flex items-center gap-2 hover:bg-gray-800 p-2 rounded"><img
+                        src="Images/Porygon2-54x53.png" alt="Porygon2" class="w-10 h-10">Damage Calculator</a></li>
+        </ul>
+    </nav>
+    <div id="menuOverlay" class="fixed inset-0 bg-black/50 hidden z-30"></div>
+
+    <main id="mainContent" class="transition-transform duration-300 p-6 ml-0 md:ml-0 flex-1">
+        <h2 class="text-2xl font-bold mb-4">Codex</h2>
+
+        <section class="codex-container space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center gap-2">
+                <label for="searchPokemon" class="font-medium text-white">Rechercher un Pokémon</label>
+                <input type="search" id="searchPokemon"
+                    class="border border-gray-300 bg-white text-black rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    placeholder="Nom ou n°">
+            </div>
+
+            <div id="codexStatus" class="text-gray-600"></div>
+            <div id="codexError" class="text-red-500"></div>
+
+            <div id="pokedexGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+        </section>
+    </main>
+
+    <div id="Poke-modal" class="fixed inset-0 hidden bg-slate-700/50 flex items-center justify-center z-50">
+        <div
+            class="bg-gray-900 text-gray-200 rounded-2xl shadow-xl w-11/12 md:w-3/4 lg:w-1/2 max-h-[90vh] overflow-y-auto flex flex-col md:flex-row gap-6 p-6 relative">
+            <button id="close-modal"
+                class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold cursor-pointer">&times;</button>
+            <img id="Poke-poster" src="" alt=""
+                class="w-full md:w-1/3 h-auto object-contain rounded-lg bg-gray-800 p-2 flex-shrink-0">
+            <div class="flex-1 flex flex-col gap-2">
+                <h2 id="Poke-title" class="text-3xl font-bold text-white uppercase"></h2>
+                <p class="text-white text-sm" id="modal-id"></p>
+                <p class="text-white" id="modal-types"></p>
+                <p id="modal-description" class="text-gray-200 break-words"></p>
+            </div>
+        </div>
     </div>
-</header>
 
-<div class="side-menu" id="sideMenu">
-    <a href="Accueil.html" alt="Accueil"><img src="Images/Pokecenter54x41.png" alt="Pokécenter"><span><p>plai</p>Accueil</span></a>
-    <a href="Pokébuilder.html" alt="Pokébuilder"><img src="Images/Togepi54x54.png" alt="Togepi"><span><p>A</p>Pokébuilder</span></a>
-    <a href="Codex.html" alt="Codex"><img src="Images/Pokedex-54x41.png" alt="Pokedex"><span><p>plac</p>Codex</span></a>
-    <a href="Dmgcalc.html"alt="Dmgcalc"><img src="Images/Porygon2-54x53.png" alt="Porygon2"><span>Damage calculator</span></a>
-</div>
+    <footer id="footer" class="bg-gray-800 text-gray-200 text-center py-4 mt-6">
+        © 2025 - Poké Tools
+    </footer>
 
-<div class="menu-overlay" id="menuOverlay"></div>
-
-<main id="mainContent">
-    <div class="main-content">
-        <h2>Codex</h2>
-    </div>
-</main>
-
-<footer id="footer">
-    <p>© 2025 - Poké tools</p>
-</footer>
-
-<script>
-const menuBtn = document.getElementById("menuBtn");
-const sideMenu = document.getElementById("sideMenu");
-const menuOverlay = document.getElementById("menuOverlay");
-const mainContent = document.getElementById("mainContent");
-const footer = document.getElementById("footer");
-
-menuBtn.addEventListener("click", toggleMenu);
-menuOverlay.addEventListener("click", toggleMenu);
-
-function toggleMenu() {
-    sideMenu.classList.toggle("open");
-    menuOverlay.classList.toggle("active");
-
-    if(sideMenu.classList.contains("open")) {
-        mainContent.style.transform = "translateX(250px)";
-        footer.style.transform = "translateX(0px)";
-        menuBtn.textContent = "✕";
-    } else {
-        mainContent.style.transform = "translateX(0)";
-        footer.style.transform = "translateX(0)";
-        menuBtn.textContent = "☰";
-    }
-}
-</script>
-
+    <script src="script.js"></script>
 </body>
+
 </html>

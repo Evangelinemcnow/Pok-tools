@@ -1,74 +1,65 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-
-<title>Poké tools</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poké Tools - Accueil</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
 
-<header>
-    <div class="left-header">
-        <button class="menu-btn" id="menuBtn">☰</button>
-        <h1>Poké tools</h1>
-    </div>
-</header>
+<body class="bg-[#0A0908] text-gray-900 min-h-screen flex flex-col">
 
-<div class="side-menu" id="sideMenu">
-    <a href="Accueil.html" alt="Accueil"><img src="Images/Pokecenter54x41.png" alt="Pokécenter"><span><p>plai</p>Accueil</span></a>
-    <a href="Pokébuilder.html" alt="Pokébuilder"><img src="Images/Togepi54x54.png" alt="Togepi"><span><p>A</p>Pokébuilder</span></a>
-    <a href="Codex.html" alt="Codex"><img src="Images/Pokedex-54x41.png" alt="Pokedex"><span><p>plac</p>Codex</span></a>
-    <a href="Dmgcalc.html"alt="Dmgcalc"><img src="Images/Porygon2-54x53.png" alt="Porygon2"><span>Damage calculator</span></a>
-</div>
+    <!-- Header -->
+    <header class="bg-gray-800 text-white shadow-md p-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <button id="menuBtn" class="text-2xl font-bold hover:text-gray-300">☰</button>
+            <h1 class="text-xl font-bold">Poké Tools</h1>
+        </div>
+    </header>
 
-<div class="menu-overlay" id="menuOverlay"></div>
+    <!-- Side Menu -->
+    <nav id="sideMenu"
+        class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white transform -translate-x-full transition-transform duration-300 z-40">
+        <ul class="flex flex-col mt-6 gap-4 p-4">
+            <li><a href="Accueil.html" class="flex items-center gap-2 hover:bg-gray-800 p-2 rounded"><img
+                        src="Images/Pokecenter54x41.png" alt="Pokécenter" class="w-10 h-10">Accueil</a></li>
+            <li><a href="Pokébuilder.html" class="flex items-center gap-2 hover:bg-gray-800 p-2 rounded"><img
+                        src="Images/Togepi54x54.png" alt="Togepi" class="w-10 h-10">Pokébuilder</a></li>
+            <li><a href="Codex.html" class="flex items-center gap-2 hover:bg-gray-800 p-2 rounded"><img
+                        src="Images/Pokedex-54x41.png" alt="Pokedex" class="w-10 h-10">Codex</a></li>
+            <li><a href="Dmgcalc.html" class="flex items-center gap-2 hover:bg-gray-800 p-2 rounded"><img
+                        src="Images/Porygon2-54x53.png" alt="Porygon2" class="w-10 h-10">Damage Calculator</a></li>
+        </ul>
+    </nav>
 
-<main id="mainContent">
-    <div class="main-content">
-        <img src="Images/Accueil.poketools.png" alt="Accueil" class="logo-accueil">
+    <!-- Menu Overlay -->
+    <div id="menuOverlay" class="fixed inset-0 hidden z-30"></div>
 
-        <div class="center-box">
-            <h2>Bienvenue sur poké tools</h2>
-            <textarea placeholder="Bienvenue sur cette première version de Poké tools
-Je vais utiliser ce site pour centraliser tous mes outils pour Pokémon.
-Le site est fait par une fan et n'a aucun lien avec Pokémon company ni Nitendo.
-Si vous vous avez une question ou que vous trouvez un bug, contactez moi sur Reddit.
-Merci d'utiliser Poké tools. J'espère pouvoir ajouter de nouveaux outils très bientôt.
-— Evangéline" rows="20"></textarea>
-    </div>
-</main>
+    <!-- Main Content -->
+    <main id="mainContent" class="transition-transform duration-300 p-6 ml-0 flex-1">
+        <div class="max-w-4xl mx-auto flex flex-col items-center gap-6">
+            <img src="Images/Accueil.poketools.png" alt="Accueil" class="w-64 h-auto">
 
-<footer id="footer">
-    <span>© 2025 - Poké tools</span>
-</footer>
+            <div
+                class="w-full bg-gray-800 border border-gray-300 rounded text-white p-6 text-center whitespace-pre-line focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                Bienvenue sur cette première version de Poké Tools
+                Je vais utiliser ce site pour centraliser tous mes outils pour Pokémon.
+                Le site est fait par une fan et n'a aucun lien avec Pokémon Company ni Nintendo.
+                Si vous avez une question ou que vous trouvez un bug, contactez-moi sur
+                <a href="https://github.com/Evangelinemcnow" target="_blank"
+                    class="text-blue-500 hover:underline">Github</a>.
+                Merci d'utiliser Poké Tools. J'espère pouvoir ajouter de nouveaux outils très bientôt.
+                — Evangéline
+            </div>
+        </div>
+    </main>
 
-<script>
-const menuBtn = document.getElementById("menuBtn");
-const sideMenu = document.getElementById("sideMenu");
-const menuOverlay = document.getElementById("menuOverlay");
-const mainContent = document.getElementById("mainContent");
-const footer = document.getElementById("footer");
-
-menuBtn.addEventListener("click", toggleMenu);
-menuOverlay.addEventListener("click", toggleMenu);
-
-function toggleMenu() {
-    sideMenu.classList.toggle("open");
-    menuOverlay.classList.toggle("active");
-
-    if(sideMenu.classList.contains("open")) {
-        mainContent.style.transform = "translateX(250px)";
-        footer.style.transform = "translateX(0px)";
-        menuBtn.textContent = "✕";
-    } else {
-        mainContent.style.transform = "translateX(0)";
-        footer.style.transform = "translateX(0)";
-        menuBtn.textContent = "☰";
-    }
-}
-</script>
-
+    <!-- Footer -->
+    <footer id="footer" class="bg-gray-800 text-gray-200 text-center py-4 mt-auto">
+        © 2025 - Poké Tools
+    </footer>
+    <script defer src="script.js"></script>
 </body>
+
 </html>
