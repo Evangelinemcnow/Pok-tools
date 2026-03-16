@@ -1,17 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePokemon } from '../hooks/usePokemon';
-import { getFrenchName, getFrenchDescription } from '../utils/pokemon';
+import { getPokemonFullDetails } from '../utils/pokemon';
 import PokemonCard from '../components/PokemonCard';
 import PokemonModal from '../components/PokemonModal';
 
 const PAGE_SIZE = 20;
 
+function normalizeText(value) {
+    return (value || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
+
 function debounce(fn, delay = 200) {
-    let timer;
-    return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn(...args), delay);
+    let timerId;
+
+    const debounced = (...args) => {
+        clearTimeout(timerId);
+        timerId = setTimeout(() => fn(...args), delay);
     };
+
+    debounced.cancel = () => {
+        clearTimeout(timerId);
+    };
+
+    return debounced;
 }
 
 export default function Codex() {
@@ -19,52 +33,71 @@ export default function Codex() {
     const [searchQuery, setSearchQuery] = useState(() => localStorage.getItem("pokedexSearch") || "");
     const [currentPage, setCurrentPage] = useState(1);
     const [pokemonDetails, setPokemonDetails] = useState(null);
-    const [error, setError] = useState(initialError);
+    const trimmedQuery = searchQuery.trim();
+
+    const debouncedSearchPersist = useMemo(
+        () => debounce((value) => {
+            localStorage.setItem("pokedexSearch", value);
+            setCurrentPage(1);
+        }),
+        []
+    );
 
     useEffect(() => {
-        setError(initialError);
-    }, [initialError]);
+        return () => {
+            debouncedSearchPersist.cancel();
+        };
+    }, [debouncedSearchPersist]);
 
-    const filteredPokemons = searchQuery.trim() === ""
-        ? allPokemons
-        : allPokemons.filter(p =>
-            p.name.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
-            String(p.id) === searchQuery.trim()
-        );
+    const normalizedQuery = useMemo(
+        () => normalizeText(trimmedQuery),
+        [trimmedQuery]
+    );
 
-    const handleSearch = debounce((value) => {
-        localStorage.setItem("pokedexSearch", value);
-        setCurrentPage(1);
-    });
+    const filteredPokemons = useMemo(() => {
+        if (trimmedQuery === "") {
+            return allPokemons;
+        }
+
+        return allPokemons.filter((pokemon) => (
+            normalizeText(pokemon.name).includes(normalizedQuery)
+            || normalizeText(pokemon.nameFr).includes(normalizedQuery)
+            || normalizeText(pokemon.nameEn).includes(normalizedQuery)
+            || normalizeText(pokemon.slug).includes(normalizedQuery)
+            || String(pokemon.id) === trimmedQuery
+        ));
+    }, [allPokemons, normalizedQuery, trimmedQuery]);
+
+    const { paginatedPokemons, hasMore } = useMemo(() => {
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const end = currentPage * PAGE_SIZE;
+
+        return {
+            paginatedPokemons: filteredPokemons.slice(start, end),
+            hasMore: end < filteredPokemons.length
+        };
+    }, [currentPage, filteredPokemons]);
 
     const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value);
-        handleSearch(e.target.value);
+        const { value } = e.target;
+        setSearchQuery(value);
+        debouncedSearchPersist(value);
     };
 
     const handleCardClick = async (pokemon) => {
         try {
-            const frenchName = await getFrenchName(pokemon.id);
-            const descFr = await getFrenchDescription(pokemon.id);
-            setPokemonDetails({
-                ...pokemon,
-                frenchName: frenchName || pokemon.name,
-                description: descFr,
-            });
+            const fullDetails = await getPokemonFullDetails(pokemon.id);
+            setPokemonDetails(fullDetails);
         } catch (err) {
             console.error("Error fetching Pokemon details:", err);
             setPokemonDetails({
                 ...pokemon,
-                frenchName: pokemon.name,
-                description: "Description non disponible.",
+                nameFr: pokemon.nameFr,
+                nameEn: pokemon.nameEn,
+                description: "Erreur lors du chargement des détails.",
             });
         }
     };
-
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const end = currentPage * PAGE_SIZE;
-    const paginatedPokemons = filteredPokemons.slice(start, end);
-    const hasMore = end < filteredPokemons.length;
 
     return (
         <div>
@@ -85,12 +118,16 @@ export default function Codex() {
                     />
                 </div>
 
+                <p className="text-sm text-gray-400">
+                    Source des donnees: Tyradex. Recherche par nom FR, nom EN, slug ou numero.
+                </p>
+
                 {loading && (
                     <div className="text-gray-400">Chargement des Pokémon...</div>
                 )}
 
-                {error && (
-                    <div className="text-red-500">{error}</div>
+                {initialError && (
+                    <div className="text-red-500">{initialError}</div>
                 )}
 
                 <div id="pokedexGrid" className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">

@@ -7,22 +7,36 @@ export function usePokemon() {
     const [error, setError] = useState("");
 
     useEffect(() => {
+        let isMounted = true;
+
         const loadPokemons = async () => {
-            setLoading(true);
-            setError("");
+            if (isMounted) {
+                setLoading(true);
+                setError("");
+            }
+
             try {
                 const pokemons = await fetchAllPokemons();
-                setAllPokemons(pokemons);
-                setError("");
+                if (isMounted) {
+                    setAllPokemons(pokemons);
+                }
             } catch (err) {
                 console.error("Error loading pokemons:", err);
-                setError("Erreur lors du chargement des Pokémon. Veuillez réessayer.");
+                if (isMounted) {
+                    setError("Erreur lors du chargement des Pokémon. Veuillez réessayer.");
+                }
             } finally {
-                setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
         };
 
         loadPokemons();
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     return { allPokemons, loading, error };

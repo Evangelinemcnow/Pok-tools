@@ -20,8 +20,7 @@ export default function App() {
 
         <main
           id="mainContent"
-          className={`transition-transform duration-300 p-6 flex-1 ${menuOpen ? 'ml-64' : 'ml-0'
-            }`}
+          className={`transition-transform duration-300 p-6 flex-1 ${menuOpen ? 'ml-64' : 'ml-0'}`}
         >
           <Routes>
             <Route path="/" element={<Home />} />
