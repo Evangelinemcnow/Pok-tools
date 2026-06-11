@@ -19,3 +19,13 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
+.pokebuilder-select {
+  color-scheme: light;
+}
+
+.pokebuilder-select,
+.pokebuilder-select option {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+}
